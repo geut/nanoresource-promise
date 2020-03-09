@@ -35,6 +35,9 @@ class NanoresourcePromise extends nanoresource {
     super.close(allowActive, callback)
     return callback.promise
   }
+
+  async _open () {}
+  async _close () {}
 }
 
 module.exports = (opts) => new NanoresourcePromise(opts)
