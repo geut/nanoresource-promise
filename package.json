@@ -1,6 +1,6 @@
 {
   "name": "nanoresource-promise",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Promises based nanoresource",
   "main": "index.js",
   "files": [
