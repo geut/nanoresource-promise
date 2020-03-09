@@ -14,7 +14,7 @@ $ npm install nanoresource
 
 ## <a name="usage"></a> Usage
 
-```
+```javascript
 const nanoresource = require('nanoresource')
 
 ;(async () => {
