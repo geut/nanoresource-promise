@@ -36,15 +36,17 @@ class NanoresourcePromise extends EventEmitter {
   /**
    * @returns {Promise}
    */
-  open () {
-    return this[kNanoresource].open()
+  async open () {
+    await this[kNanoresource].open()
+    this.emit('opened')
   }
 
   /**
    * @returns {Promise}
    */
-  close (allowActive) {
-    return this[kNanoresource].close(allowActive)
+  async close (allowActive) {
+    await this[kNanoresource].close(allowActive)
+    this.emit('closed')
   }
 
   /**
