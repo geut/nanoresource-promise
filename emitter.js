@@ -3,13 +3,13 @@ const nanoresource = require('.')
 
 const kNanoresource = Symbol('nanosignal.nanoresource')
 
-module.exports = class NanoresourcePromise extends EventEmitter {
-  constructor () {
+class NanoresourcePromise extends EventEmitter {
+  constructor (opts = {}) {
     super()
 
     this[kNanoresource] = nanoresource({
-      open: this._open.bind(this),
-      close: this._close.bind(this)
+      open: opts.open || this._open.bind(this),
+      close: opts.close || this._close.bind(this)
     })
   }
 
@@ -71,3 +71,6 @@ module.exports = class NanoresourcePromise extends EventEmitter {
    */
   async _close () {}
 }
+
+module.exports = (opts) => new NanoresourcePromise(opts)
+module.exports.NanoresourcePromise = NanoresourcePromise
