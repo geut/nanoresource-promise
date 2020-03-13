@@ -24,15 +24,39 @@ class NanoresourcePromise extends nanoresource {
     this._close = (cb) => { _close().then(() => cb()).catch(err => cb(err)) }
   }
 
+  /**
+   * @returns {Promise}
+   */
   open () {
     const callback = callbackPromise()
     super.open(callback)
     return callback.promise
   }
 
+  /**
+   * @returns {Promise}
+   */
   close (allowActive = false) {
     const callback = callbackPromise()
     super.close(allowActive, callback)
+    return callback.promise
+  }
+
+  /**
+   * @returns {Promise}
+   */
+  active () {
+    const callback = nanoresource.callbackPromise()
+    super.active(callback)
+    return callback.promise
+  }
+
+  /**
+   * @returns {Promise}
+   */
+  inactive (err, val) {
+    const callback = nanoresource.callbackPromise()
+    super.inactive(callback, err, val)
     return callback.promise
   }
 
