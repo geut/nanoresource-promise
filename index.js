@@ -37,7 +37,13 @@ class NanoresourcePromise extends nanoresource {
    * @returns {Promise}
    */
   close (allowActive = false) {
-    const callback = callbackPromise()
+    let callback
+    if (typeof allowActive === 'function') {
+      callback = allowActive
+      allowActive = false
+    } else {
+      callback = callbackPromise()
+    }
     super.close(allowActive, callback)
     return callback.promise
   }
