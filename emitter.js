@@ -1,7 +1,7 @@
 const { EventEmitter } = require('events')
 const nanoresource = require('.')
 
-const kNanoresource = Symbol('nanosignal.nanoresource')
+const kNanoresource = Symbol('nanoresource')
 
 class NanoresourcePromise extends EventEmitter {
   constructor (opts = {}) {
