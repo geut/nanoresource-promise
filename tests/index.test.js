@@ -56,3 +56,23 @@ test('preclosing', async () => {
   expect(open).toHaveBeenCalledTimes(1)
   expect(close).toHaveBeenCalledTimes(1)
 })
+
+test('reopen', async () => {
+  const open = jest.fn(() => Promise.resolve())
+  const close = jest.fn(() => Promise.resolve())
+
+  const resource = nanoresource({
+    reopen: true,
+    open,
+    close
+  })
+
+  await resource.open()
+  resource.close()
+  await resource.open()
+
+  expect(open).toHaveBeenCalledTimes(2)
+  expect(close).toHaveBeenCalledTimes(1)
+  expect(resource.opened).toBe(true)
+  expect(resource.closed).toBe(false)
+})

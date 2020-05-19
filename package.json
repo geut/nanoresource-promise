@@ -17,7 +17,7 @@
     "prepublishOnly": "npm test"
   },
   "dependencies": {
-    "nanoresource": "^1.3.0"
+    "nanoresource": "git+https://github.com/tinchoz49/nanoresource.git#tinchoz49/refactor-added-reopen-feature"
   },
   "devDependencies": {
     "@geut/chan": "^2.0.0",
