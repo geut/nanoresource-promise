@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 1.2.2 - 2020-05-19 [YANKED]
+
 ## 1.2.1 - 2020-03-27 [YANKED]
 
 ## 1.2.0 - 2020-03-13 [YANKED]
@@ -17,4 +19,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.1 - 2020-03-09 [YANKED]
 
 ## 1.0.0 - 2020-03-09 [YANKED]
-[Unreleased]: https://github.com/geut/nanoresource-promise/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/geut/nanoresource-promise/compare/v1.2.2...HEAD
