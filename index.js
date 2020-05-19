@@ -14,14 +14,16 @@ function callbackPromise () {
   return callback
 }
 
+const kProcessPromise = Symbol('processpromise')
+
 class NanoresourcePromise extends nanoresource {
   constructor (opts) {
     super(opts)
 
-    const _open = this._open.bind(this)
-    const _close = this._close.bind(this)
-    this._open = (cb) => { _open().then(() => cb()).catch(err => cb(err)) }
-    this._close = (cb) => { _close().then(() => cb()).catch(err => cb(err)) }
+    const prevOpen = this._open.bind(this)
+    const prevClose = this._close.bind(this)
+    this._open = (cb) => this[kProcessPromise](prevOpen, cb)
+    this._close = (cb) => this[kProcessPromise](prevClose, cb)
   }
 
   /**
@@ -68,6 +70,15 @@ class NanoresourcePromise extends nanoresource {
 
   async _open () {}
   async _close () {}
+
+  async [kProcessPromise] (fnPromise, cb) {
+    try {
+      await fnPromise()
+      cb()
+    } catch (err) {
+      cb(err)
+    }
+  }
 }
 
 module.exports = (opts) => new NanoresourcePromise(opts)
