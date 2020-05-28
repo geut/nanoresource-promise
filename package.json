@@ -6,7 +6,8 @@
   "files": [
     "lib",
     "index.js",
-    "emitter.js"
+    "emitter.js",
+    "nanoresource-cb.js"
   ],
   "scripts": {
     "start": "node index.js",
