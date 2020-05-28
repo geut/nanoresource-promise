@@ -16,9 +16,6 @@
     "version": "chan release --allow-yanked ${npm_package_version} && git add .",
     "prepublishOnly": "npm test"
   },
-  "dependencies": {
-    "nanoresource": "git+https://github.com/tinchoz49/nanoresource.git#tinchoz49/refactor-added-reopen-feature"
-  },
   "devDependencies": {
     "@geut/chan": "^2.0.0",
     "@geut/xd": "^1.5.0",

@@ -1,4 +1,4 @@
-const nanoresource = require('nanoresource')
+const nanoresource = require('./nanoresource-cb')
 
 function callbackPromise () {
   let callback
