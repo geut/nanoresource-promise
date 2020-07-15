@@ -1,12 +1,13 @@
 {
   "name": "nanoresource-promise",
-  "version": "1.2.2",
+  "version": "2.0.0-beta.2",
   "description": "Promises based nanoresource",
   "main": "index.js",
   "files": [
     "lib",
     "index.js",
-    "emitter.js"
+    "emitter.js",
+    "nanoresource-cb.js"
   ],
   "scripts": {
     "start": "node index.js",
@@ -15,9 +16,6 @@
     "lint": "xd-ns \"**/*.js\"",
     "version": "chan release --allow-yanked ${npm_package_version} && git add .",
     "prepublishOnly": "npm test"
-  },
-  "dependencies": {
-    "nanoresource": "^1.3.0"
   },
   "devDependencies": {
     "@geut/chan": "^2.0.0",

@@ -1,4 +1,4 @@
-const nanoresource = require('nanoresource')
+const nanoresource = require('./nanoresource-cb')
 
 function callbackPromise () {
   let callback
@@ -14,16 +14,39 @@ function callbackPromise () {
   return callback
 }
 
+const kNanoresource = Symbol('nanoresource')
 const kProcessPromise = Symbol('processpromise')
 
-class NanoresourcePromise extends nanoresource {
-  constructor (opts) {
-    super(opts)
+class NanoresourcePromise {
+  constructor (opts = {}) {
+    const open = opts.open || this._open.bind(this)
+    const close = opts.close || this._close.bind(this)
 
-    const prevOpen = this._open.bind(this)
-    const prevClose = this._close.bind(this)
-    this._open = (cb) => this[kProcessPromise](prevOpen, cb)
-    this._close = (cb) => this[kProcessPromise](prevClose, cb)
+    this[kNanoresource] = nanoresource({
+      open: (cb) => this[kProcessPromise](open, cb),
+      close: (cb) => this[kProcessPromise](close, cb),
+      reopen: opts.reopen
+    })
+  }
+
+  get opened () {
+    return this[kNanoresource].opened
+  }
+
+  get opening () {
+    return this[kNanoresource].opening
+  }
+
+  get closed () {
+    return this[kNanoresource].closed
+  }
+
+  get closing () {
+    return this[kNanoresource].closing
+  }
+
+  get actives () {
+    return this[kNanoresource].actives
   }
 
   /**
@@ -31,7 +54,7 @@ class NanoresourcePromise extends nanoresource {
    */
   open () {
     const callback = callbackPromise()
-    super.open(callback)
+    this[kNanoresource].open(callback)
     return callback.promise
   }
 
@@ -39,36 +62,33 @@ class NanoresourcePromise extends nanoresource {
    * @returns {Promise}
    */
   close (allowActive = false) {
-    let callback
-    if (typeof allowActive === 'function') {
-      callback = allowActive
-      allowActive = false
-    } else {
-      callback = callbackPromise()
-    }
-    super.close(allowActive, callback)
+    const callback = callbackPromise()
+    this[kNanoresource].close(allowActive, callback)
     return callback.promise
   }
 
   /**
-   * @returns {Promise}
+   * @returns {boolean}
    */
-  active () {
-    const callback = nanoresource.callbackPromise()
-    super.active(callback)
-    return callback.promise
+  active (cb) {
+    return this[kNanoresource].active(cb)
   }
 
   /**
-   * @returns {Promise}
+   * @returns {boolean}
    */
-  inactive (err, val) {
-    const callback = nanoresource.callbackPromise()
-    super.inactive(callback, err, val)
-    return callback.promise
+  inactive (cb, err, value) {
+    return this[kNanoresource].inactive(cb, err, value)
   }
 
+  /**
+   * @abstract
+   */
   async _open () {}
+
+  /**
+   * @abstract
+   */
   async _close () {}
 
   async [kProcessPromise] (fnPromise, cb) {

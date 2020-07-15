@@ -9,7 +9,8 @@ class NanoresourcePromise extends EventEmitter {
 
     this[kNanoresource] = nanoresource({
       open: opts.open || this._open.bind(this),
-      close: opts.close || this._close.bind(this)
+      close: opts.close || this._close.bind(this),
+      reopen: opts.reopen
     })
   }
 
@@ -50,17 +51,17 @@ class NanoresourcePromise extends EventEmitter {
   }
 
   /**
-   * @returns {Promise}
+   * @returns {boolean}
    */
-  active () {
-    return this[kNanoresource].active()
+  active (cb) {
+    return this[kNanoresource].active(cb)
   }
 
   /**
-   * @returns {Promise}
+   * @returns {boolean}
    */
-  inactive (err, value) {
-    return this[kNanoresource].inactive(err, value)
+  inactive (cb, err, value) {
+    return this[kNanoresource].inactive(cb, err, value)
   }
 
   /**
