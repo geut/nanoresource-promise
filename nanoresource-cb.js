@@ -1,6 +1,7 @@
 /**
  *
- * workaround for now
+ * This code is based on the @mafintosh work.
+ * https://github.com/mafintosh/nanoresource
  */
 
 const preopening = Symbol('opening when closing')
