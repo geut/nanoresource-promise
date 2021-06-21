@@ -9,13 +9,13 @@
 ## <a name="install"></a> Install
 
 ```
-$ npm install nanoresource
+$ npm install nanoresource-promise
 ```
 
 ## <a name="usage"></a> Usage
 
 ```javascript
-const nanoresource = require('nanoresource')
+const nanoresource = require('nanoresource-promise')
 
 ;(async () => {
   const resource = nanoresource({
