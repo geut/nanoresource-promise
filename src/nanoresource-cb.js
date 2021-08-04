@@ -13,7 +13,9 @@ const fastClose = Symbol('fast close')
 const reopen = Symbol('allow reopen')
 const init = Symbol('init state')
 
-class Nanoresource {
+function noop () {}
+
+export class Nanoresource {
   constructor (opts) {
     if (!opts) opts = {}
     if (opts.open) this._open = opts.open
@@ -162,8 +164,3 @@ function onclose (err) {
     while (cqueue.length) this.open(cqueue.shift())
   }
 }
-
-function noop () {}
-
-module.exports = (opts) => new Nanoresource(opts)
-module.exports.Nanoresource = Nanoresource

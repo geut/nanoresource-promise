@@ -1,78 +1,78 @@
-const nanoresource = require('..')
+import { test } from 'uvu'
+import * as assert from 'uvu/assert'
 
-test('default', async () => {
-  const open = jest.fn(() => Promise.resolve())
-  const close = jest.fn(() => Promise.resolve())
+import { NanoresourcePromise } from '../src/index.js'
 
-  const resource = nanoresource({
-    open,
-    close
-  })
+test('basic', async () => {
+  const calls = {
+    open: 0,
+    close: 0
+  }
 
-  await resource.open()
-  await resource.close()
-
-  expect(open).toHaveBeenCalledTimes(1)
-  expect(close).toHaveBeenCalledTimes(1)
-  expect(resource.open()).rejects.toThrow('Resource is closed')
-})
-
-test('class', async () => {
-  const open = jest.fn(() => Promise.resolve())
-  const close = jest.fn(() => Promise.resolve())
-
-  class Custom extends nanoresource.NanoresourcePromise {
-    async _open () {
-      return open()
+  class Resource extends NanoresourcePromise {
+    _open () {
+      calls.open++
     }
 
-    async _close () {
-      return close()
+    _close () {
+      calls.close++
     }
   }
 
-  const resource = new Custom()
+  const resource = new Resource()
 
   await resource.open()
   await resource.close()
 
-  expect(open).toHaveBeenCalledTimes(1)
-  expect(close).toHaveBeenCalledTimes(1)
-  expect(resource.open()).rejects.toThrow('Resource is closed')
+  try {
+    await resource.open()
+    assert.unreachable()
+  } catch (err) {
+    assert.is(err.message, 'Resource is closed')
+  }
+
+  assert.is(calls.open, 1)
+  assert.is(calls.close, 1)
 })
 
 test('preclosing', async () => {
-  const open = jest.fn(() => Promise.resolve())
-  const close = jest.fn(() => Promise.resolve())
+  const calls = {
+    open: 0,
+    close: 0
+  }
 
-  const resource = nanoresource({
-    open,
-    close
+  const resource = new NanoresourcePromise({
+    open: () => calls.open++,
+    close: () => calls.close++
   })
 
   resource.open()
   await resource.close()
 
-  expect(open).toHaveBeenCalledTimes(1)
-  expect(close).toHaveBeenCalledTimes(1)
+  assert.is(calls.open, 1)
+  assert.is(calls.close, 1)
 })
 
 test('reopen', async () => {
-  const open = jest.fn(() => Promise.resolve())
-  const close = jest.fn(() => Promise.resolve())
+  const calls = {
+    open: 0,
+    close: 0
+  }
 
-  const resource = nanoresource({
-    reopen: true,
-    open,
-    close
+  const resource = new NanoresourcePromise({
+    open: () => calls.open++,
+    close: () => calls.close++,
+    reopen: true
   })
 
   await resource.open()
   resource.close()
   await resource.open()
 
-  expect(open).toHaveBeenCalledTimes(2)
-  expect(close).toHaveBeenCalledTimes(1)
-  expect(resource.opened).toBe(true)
-  expect(resource.closed).toBe(false)
+  assert.is(calls.open, 2)
+  assert.is(calls.close, 1)
+  assert.ok(resource.opened)
+  assert.not.ok(resource.closed)
 })
+
+test.run()

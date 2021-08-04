@@ -1,15 +1,26 @@
-const { EventEmitter } = require('events')
-const nanoresource = require('.')
+import { EventEmitter } from 'events'
+import { NanoresourcePromise as Nanoresource } from './index.js'
 
 const kNanoresource = Symbol('nanoresource')
 
-class NanoresourcePromise extends EventEmitter {
+export class NanoresourcePromise extends EventEmitter {
   constructor (opts = {}) {
     super()
 
-    this[kNanoresource] = nanoresource({
-      open: opts.open || this._open.bind(this),
-      close: opts.close || this._close.bind(this),
+    const _open = opts.open || this._open.bind(this)
+    const _close = opts.close || this._close.bind(this)
+
+    this[kNanoresource] = new Nanoresource({
+      open: async () => {
+        this.emit('open')
+        await _open()
+        this.emit('opened')
+      },
+      close: async () => {
+        this.emit('close')
+        await _close()
+        this.emit('closed')
+      },
       reopen: opts.reopen
     })
   }
@@ -38,16 +49,14 @@ class NanoresourcePromise extends EventEmitter {
    * @returns {Promise}
    */
   async open () {
-    await this[kNanoresource].open()
-    this.emit('opened')
+    return this[kNanoresource].open()
   }
 
   /**
    * @returns {Promise}
    */
   async close (allowActive) {
-    await this[kNanoresource].close(allowActive)
-    this.emit('closed')
+    return this[kNanoresource].close(allowActive)
   }
 
   /**
@@ -74,6 +83,3 @@ class NanoresourcePromise extends EventEmitter {
    */
   async _close () {}
 }
-
-module.exports = (opts) => new NanoresourcePromise(opts)
-module.exports.NanoresourcePromise = NanoresourcePromise

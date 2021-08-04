@@ -1,4 +1,4 @@
-const nanoresource = require('./nanoresource-cb')
+import { Nanoresource } from './nanoresource-cb.js'
 
 function callbackPromise () {
   let callback
@@ -17,12 +17,12 @@ function callbackPromise () {
 const kNanoresource = Symbol('nanoresource')
 const kProcessPromise = Symbol('processpromise')
 
-class NanoresourcePromise {
+export class NanoresourcePromise {
   constructor (opts = {}) {
     const open = opts.open || this._open.bind(this)
     const close = opts.close || this._close.bind(this)
 
-    this[kNanoresource] = nanoresource({
+    this[kNanoresource] = new Nanoresource({
       open: (cb) => this[kProcessPromise](open, cb),
       close: (cb) => this[kProcessPromise](close, cb),
       reopen: opts.reopen
@@ -100,6 +100,3 @@ class NanoresourcePromise {
     }
   }
 }
-
-module.exports = (opts) => new NanoresourcePromise(opts)
-module.exports.NanoresourcePromise = NanoresourcePromise
