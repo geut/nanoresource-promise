@@ -1,6 +1,6 @@
 {
   "name": "nanoresource-promise",
-  "version": "2.0.0",
+  "version": "2.2.2",
   "description": "Promises based nanoresource",
   "type": "module",
   "exports": {

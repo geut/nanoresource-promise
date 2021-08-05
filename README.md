@@ -15,10 +15,10 @@ $ npm install nanoresource-promise
 ## <a name="usage"></a> Usage
 
 ```javascript
-const nanoresource = require('nanoresource-promise')
+import { NanoresourcePromise } from 'nanoresource-promise'
 
 ;(async () => {
-  const resource = nanoresource({
+  const resource = new NanoresourcePromise({
     async open() {
       // open the resource
     },
@@ -26,6 +26,31 @@ const nanoresource = require('nanoresource-promise')
       // close the resource
     }
   })
+
+  await resource.open()
+  await resource.close()
+})()
+```
+
+### Event support
+
+```javascript
+import { NanoresourcePromise } from 'nanoresource-promise/emitter' // for emittery support uses 'nanoresource-promise/emittery'
+
+;(async () => {
+  const resource = new NanoresourcePromise({
+    async open() {
+      // open the resource
+    },
+    async close() {
+      // close the resource
+    }
+  })
+
+  resource.on('open', () => {})
+  resource.on('opened', () => {})
+  resource.on('close', () => {})
+  resource.on('closed', () => {})
 
   await resource.open()
   await resource.close()
