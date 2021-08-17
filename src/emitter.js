@@ -14,12 +14,10 @@ export class NanoresourcePromise extends EventEmitter {
       open: async () => {
         this.emit('open')
         await _open()
-        this.emit('opened')
       },
       close: async () => {
         this.emit('close')
         await _close()
-        this.emit('closed')
       },
       reopen: opts.reopen
     })
@@ -49,14 +47,16 @@ export class NanoresourcePromise extends EventEmitter {
    * @returns {Promise}
    */
   async open () {
-    return this[kNanoresource].open()
+    await this[kNanoresource].open()
+    this.emit('opened')
   }
 
   /**
    * @returns {Promise}
    */
   async close (allowActive) {
-    return this[kNanoresource].close(allowActive)
+    await this[kNanoresource].close(allowActive)
+    this.emit('closed')
   }
 
   /**

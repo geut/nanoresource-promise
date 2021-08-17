@@ -12,12 +12,10 @@ export class NanoresourcePromise {
       open: async () => {
         await this.emit('open')
         await _open()
-        await this.emit('opened')
       },
       close: async () => {
         await this.emit('close')
         await _close()
-        await this.emit('closed')
       },
       reopen: opts.reopen
     })
@@ -49,14 +47,16 @@ export class NanoresourcePromise {
    * @returns {Promise}
    */
   async open () {
-    return this[kNanoresource].open()
+    await this[kNanoresource].open()
+    await this.emit('opened')
   }
 
   /**
    * @returns {Promise}
    */
   async close (allowActive) {
-    return this[kNanoresource].close(allowActive)
+    await this[kNanoresource].close(allowActive)
+    await this.emit('closed')
   }
 
   /**
