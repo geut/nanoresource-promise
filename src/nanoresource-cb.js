@@ -4,6 +4,8 @@
  * https://github.com/mafintosh/nanoresource
  */
 
+import nextTick from 'proc-nexttick'
+
 const preopening = Symbol('opening when closing')
 const opening = Symbol('opening queue')
 const preclosing = Symbol('closing when inactive')
@@ -53,7 +55,7 @@ export class Nanoresource {
 
     if (this.closing || this.closed) {
       if (!this[reopen]) {
-        return process.nextTick(cb, new Error('Resource is closed'))
+        return nextTick(cb, new Error('Resource is closed'))
       }
 
       if (this.closing) {
@@ -65,7 +67,7 @@ export class Nanoresource {
       this[init]()
     }
 
-    if (this.opened) return process.nextTick(cb)
+    if (this.opened) return nextTick(cb)
 
     if (this[opening]) {
       this[opening].push(cb)
@@ -81,7 +83,7 @@ export class Nanoresource {
 
   active (cb) {
     if ((this[fastClose] && this[preclosing]) || this[closing] || this.closed) {
-      if (cb) process.nextTick(cb, new Error('Resource is closed'))
+      if (cb) nextTick(cb, new Error('Resource is closed'))
       return false
     }
     this.actives++
@@ -106,7 +108,7 @@ export class Nanoresource {
 
     if (allowActive) this[fastClose] = false
 
-    if (this.closed) return process.nextTick(cb)
+    if (this.closed) return nextTick(cb)
 
     if (this.actives || this[opening]) {
       if (!this[preclosing]) this[preclosing] = []
@@ -116,7 +118,7 @@ export class Nanoresource {
 
     if (!this.opened) {
       this.closed = true
-      process.nextTick(cb)
+      nextTick(cb)
       return
     }
 
@@ -134,7 +136,7 @@ export class Nanoresource {
 }
 
 function onopen (err) {
-  if (this[sync]) return process.nextTick(onopen.bind(this), err)
+  if (this[sync]) return nextTick(onopen.bind(this), err)
 
   const oqueue = this[opening]
   this[opening] = null
@@ -151,7 +153,7 @@ function onopen (err) {
 }
 
 function onclose (err) {
-  if (this[sync]) return process.nextTick(onclose.bind(this), err)
+  if (this[sync]) return nextTick(onclose.bind(this), err)
   const queue = this[closing]
   this.closing = false
   this[closing] = null
