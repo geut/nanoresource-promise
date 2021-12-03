@@ -10,6 +10,9 @@ export class NanoresourcePromise extends EventEmitter {
     const _open = opts.open || this._open.bind(this)
     const _close = opts.close || this._close.bind(this)
 
+    this._emitOpened = null
+    this._emitClosed = null
+
     this[kNanoresource] = new Nanoresource({
       open: async () => {
         this.emit('open')
@@ -48,7 +51,11 @@ export class NanoresourcePromise extends EventEmitter {
    */
   async open () {
     await this[kNanoresource].open()
-    this.emit('opened')
+    if (!this._emitOpened) {
+      this.emit('opened')
+      this._emitOpened = true
+      this._emitClosed = null
+    }
   }
 
   /**
@@ -56,7 +63,11 @@ export class NanoresourcePromise extends EventEmitter {
    */
   async close (allowActive) {
     await this[kNanoresource].close(allowActive)
-    this.emit('closed')
+    if (!this._emitClosed) {
+      this.emit('closed')
+      this._emitClosed = true
+      this._emitOpened = null
+    }
   }
 
   /**

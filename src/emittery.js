@@ -8,6 +8,9 @@ export class NanoresourcePromise {
     const _open = opts.open || this._open.bind(this)
     const _close = opts.close || this._close.bind(this)
 
+    this._emitOpened = null
+    this._emitClosed = null
+
     this[kNanoresource] = new Nanoresource({
       open: async () => {
         await this.emit('open')
@@ -48,7 +51,11 @@ export class NanoresourcePromise {
    */
   async open () {
     await this[kNanoresource].open()
-    await this.emit('opened')
+    if (!this._emitOpened) {
+      this._emitOpened = this.emit('opened')
+      this._emitClosed = null
+    }
+    await this._emitOpened
   }
 
   /**
@@ -56,7 +63,11 @@ export class NanoresourcePromise {
    */
   async close (allowActive) {
     await this[kNanoresource].close(allowActive)
-    await this.emit('closed')
+    if (!this._emitClosed) {
+      this._emitClosed = this.emit('closed')
+      this._emitOpened = null
+    }
+    await this._emitClosed
   }
 
   /**

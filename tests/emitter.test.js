@@ -43,7 +43,7 @@ test('basic', async () => {
     calls.event++
   })
 
-  await resource.open()
+  await Promise.all([resource.open(), resource.open()])
   await resource.close()
 
   try {

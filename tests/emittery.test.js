@@ -3,7 +3,7 @@ import * as assert from 'uvu/assert'
 
 import { NanoresourcePromise } from '../src/emittery.js'
 
-test('basic', async () => {
+test.only('basic', async () => {
   const calls = {
     open: 0,
     opened: 0,
@@ -43,7 +43,7 @@ test('basic', async () => {
     calls.event++
   })
 
-  await resource.open()
+  await Promise.all([resource.open(), resource.open()])
   await resource.close()
 
   try {
