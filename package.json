@@ -19,7 +19,7 @@
     "prepublishOnly": "npm test"
   },
   "dependencies": {
-    "emittery": "^0.9.2",
+    "emittery": "^1.0.0",
     "proc-nexttick": "^1.0.0"
   },
   "devDependencies": {
