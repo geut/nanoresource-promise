@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.js",
     "./emitter": "./src/emitter.js",
-    "./emittery": "./src/emittery.js"
+    "./emittery": "./src/emittery.js",
+    "./emitter2": "./src/emitter2.js"
   },
   "files": [
     "src"
@@ -20,6 +21,7 @@
   },
   "dependencies": {
     "emittery": "^1.0.0",
+    "eventemitter2": "^6.4.9",
     "proc-nexttick": "^1.0.0"
   },
   "devDependencies": {

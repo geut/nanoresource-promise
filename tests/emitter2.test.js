@@ -1,7 +1,7 @@
 import { test } from 'uvu'
 import * as assert from 'uvu/assert'
 
-import { NanoresourcePromise } from '../src/emittery.js'
+import { NanoresourcePromise } from '../src/emitter2.js'
 
 test('basic', async () => {
   const calls = {
@@ -53,7 +53,7 @@ test('basic', async () => {
     assert.is(err.message, 'Resource is closed')
   }
 
-  await resource.emit('foo')
+  await resource.emitAsync('foo')
 
   assert.is(calls.open, 2)
   assert.is(calls.close, 2)
