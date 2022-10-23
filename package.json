@@ -3,21 +3,36 @@
   "version": "3.1.0",
   "description": "Promises based nanoresource",
   "type": "module",
+  "main": "./dist/index.cjs",
   "exports": {
-    ".": "./src/index.js",
-    "./emitter": "./src/emitter.js",
-    "./emittery": "./src/emittery.js",
-    "./emitter2": "./src/emitter2.js"
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./src/index.js"
+    },
+    "./emitter": {
+      "require": "./dist/emitter.cjs",
+      "import": "./src/emitter.js"
+    },
+    "./emittery": {
+      "require": "./dist/emittery.cjs",
+      "import": "./src/emittery.js"
+    },
+    "./emitter2": {
+      "require": "./dist/emitter2.cjs",
+      "import": "./src/emitter2.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
+    "dist",
     "src"
   ],
   "scripts": {
-    "start": "node src/index.js",
+    "build": "tsup",
     "test": "uvu",
     "posttest": "npm run lint",
     "lint": "standard",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {
     "emittery": "^1.0.0",
@@ -26,7 +41,22 @@
   },
   "devDependencies": {
     "standard": "^16.0.3",
+    "tsup": "^6.3.0",
     "uvu": "^0.5.1"
+  },
+  "tsup": {
+    "entry": [
+      "./src/index.js",
+      "./src/emitter.js",
+      "./src/emittery.js",
+      "./src/emitter2.js"
+    ],
+    "format": [
+      "cjs"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true
   },
   "standard": {
     "env": [
